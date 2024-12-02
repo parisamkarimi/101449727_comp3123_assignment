@@ -1,0 +1,16 @@
+{
+    "name": "assignment2-backend",
+    "version": "1.0.0",
+    "description": "Backend for assignment 2",
+    "main": "server.js",
+    "scripts": {
+      "start": "node server.js"
+    },
+    "dependencies": {
+     
+    },
+    "devDependencies": {
+      
+    }
+  }
+  

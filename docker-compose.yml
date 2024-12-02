@@ -1,0 +1,42 @@
+version: '3'
+services:
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - '3000:3000'  # Exposes port 3000 on the host machine for the frontend
+    depends_on:
+      - backend  # Ensures backend starts before frontend
+    environment:
+      - REACT_APP_BACKEND_URL=http://backend:5000  # Points the frontend to the backend container
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - '5000:5000'  # Exposes port 5000 on the host machine for the backend
+    depends_on:
+      - mongodb  # Ensures MongoDB starts before the backend
+    environment:
+      - MONGO_URI=mongodb://mongodb:27017/mydatabase  # Points to the MongoDB container
+
+  mongodb:
+    image: mongo  # Uses the official MongoDB image
+    ports:
+      - '27017:27017'  # Exposes MongoDB's port on the host
+    volumes:
+      - mongo-data:/data/db  # Persists MongoDB data across container restarts
+
+  mongo-express:
+    image: mongo-express:latest  # Mongo Express is a web-based MongoDB admin interface
+    ports:
+      - '8081:8081'  # Exposes the Mongo Express UI on port 8081
+    environment:
+      - ME_CONFIG_MONGODB_SERVER=mongodb  # Points to the MongoDB container
+    depends_on:
+      - mongodb  # Ensures MongoDB is up before Mongo Express
+
+volumes:
+  mongo-data:  # Defines a volume to persist MongoDB data
